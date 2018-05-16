@@ -145,18 +145,7 @@ export class Machine extends React.Component {
       })
     )
     this.stoppingTask.completed.then(() => {
-      const applicableRule = this.rewardRules.find(rule => rule.applies(this.state.wheels))
-      if (applicableRule != null) {
-        this.setState({
-          resultMessage: applicableRule.message,
-          reward: applicableRule.reward
-        })
-      } else {
-        this.setState({
-          resultMessage: this.noRewardMessage,
-          reward: 0
-        })
-      }
+      this.setState(this.getResults(this.state.wheels))
     })
   }
 
@@ -191,6 +180,21 @@ export class Machine extends React.Component {
         }
       })
     })
+  }
+
+  getResults(wheels) {
+    const applicableRule = this.rewardRules.find(rule => rule.applies(wheels))
+    if (applicableRule != null) {
+      return {
+        resultMessage: applicableRule.message,
+        reward: applicableRule.reward
+      }
+    } else {
+      return {
+        resultMessage: this.noRewardMessage,
+        reward: 0
+      }
+    }
   }
 
   render() {
