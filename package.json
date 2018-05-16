@@ -6,7 +6,8 @@
   "scripts": {
     "test": "jest",
     "coverage": "jest --coverage --collectCoverageFrom=source/**/*.{js,jsx}",
-    "start": "webpack-dev-server --mode development"
+    "start": "webpack-dev-server --mode development",
+    "build": "webpack"
   },
   "repository": {
     "type": "git",
