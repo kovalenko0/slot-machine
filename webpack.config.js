@@ -1,4 +1,5 @@
 const HtmlWebpackPlugin = require('html-webpack-plugin')
+const CopyWebpackPlugin = require('copy-webpack-plugin')
 
 module.exports = {
   entry: [
@@ -24,7 +25,13 @@ module.exports = {
   plugins: [
     new HtmlWebpackPlugin({
       template: './source/index.html'
-    })
+    }),
+    new CopyWebpackPlugin([
+      {
+        from: './source/media',
+        to: 'media'
+      }
+    ])
   ],
   devServer: {
     contentBase: './dist'
