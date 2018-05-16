@@ -4,10 +4,10 @@ import { Wheel } from "./wheel"
 
 export class MachineView extends React.Component {
   wheelSymbolImages = [
-    '/media/slot-images/strawberry.png',
-    '/media/slot-images/banana.png',
-    '/media/slot-images/orange.png',
-    '/media/slot-images/monkey.png'
+    './media/slot-images/strawberry.png',
+    './media/slot-images/banana.png',
+    './media/slot-images/orange.png',
+    './media/slot-images/monkey.png'
   ] 
 
   render() {
