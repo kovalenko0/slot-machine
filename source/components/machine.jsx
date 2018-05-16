@@ -11,36 +11,38 @@ export class MachineView extends React.Component {
   ] 
 
   render() {
-    return <div>
-      <div className="wheels">
-        {
-          this.props.wheels.map(wheel => (
-            <Wheel
-              key={wheel.id}
-              currentSymbol={wheel.currentSymbol}
-              symbolImages={this.wheelSymbolImages}
-            />
-          ))
-        }
-      </div>
-      <div>
-        <button
-          disabled={this.props.isSpinning}
-          onClick={this.props.onStartClick}
-        >
-          Start
-        </button>
-        <button
-          disabled={!this.props.isSpinning}
-          onClick={this.props.onStopClick}
-        >
-          Stop
-        </button>
+    return <div className="slot-machine">
+      <div className="body">
+        <div className="wheels">
+          {
+            this.props.wheels.map(wheel => (
+              <Wheel
+                key={wheel.id}
+                currentSymbol={wheel.currentSymbol}
+                symbolImages={this.wheelSymbolImages}
+              />
+            ))
+          }
+        </div>
+        <div className="controls">
+          <button
+            disabled={this.props.isSpinning}
+            onClick={this.props.onStartClick}
+          >
+            Start
+          </button>
+          <button
+            disabled={!this.props.isSpinning}
+            onClick={this.props.onStopClick}
+          >
+            Stop
+          </button>
+        </div>
       </div>
       {
         this.props.reward != null &&
         this.props.resultMessage != null && 
-        <div>
+        <div className="result-message">
           <div>{this.props.resultMessage}</div>
           <div>Reward: {this.props.reward}</div>
         </div>
