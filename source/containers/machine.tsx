@@ -5,16 +5,28 @@ import { RepeatingTask } from "../repeating-task";
 import { MachineView } from '../components/machine'
 import { randomIntInRange } from "../random-int-in-range";
 
-export class Machine extends React.Component {
-  state = {
+interface State {
+  wheels: Wheel[],
+  resultMessage: string,
+  reward: number
+}
+
+export interface Wheel {
+  id: number,
+  isSpinning: boolean,
+  currentSymbol: number
+}
+
+export class Machine extends React.Component<undefined, State> {
+  public state: State = {
     wheels: [],
     resultMessage: null,
     reward: null
   }
 
-  rewardRules = [
+  private rewardRules = [
     {
-      applies: wheels => {
+      applies: (wheels: Wheel[]) => {
         const result = wheels.reduce(
           (result, wheel) => {
             if (result.symbol == null) {
@@ -36,7 +48,7 @@ export class Machine extends React.Component {
       message: 'All symbols are equal'
     },
     {
-      applies: wheels => {
+      applies: (wheels: Wheel[]) => {
         const requiredAmountOfSameSymbolsInRow = 2
         const result = wheels.reduce(
           (result, wheel) => {
@@ -63,14 +75,14 @@ export class Machine extends React.Component {
       message: `You've got 2 of the same symbol in a row`
     },
     {
-      applies: wheels => {
+      applies: (wheels: Wheel[]) => {
         const requiredAmountOfSameSymbol = 2
         const symbolFrequencyMap = wheels.reduce(
           (map, wheel) => {
             map[wheel.currentSymbol] = (map[wheel.currentSymbol] || 0) + 1
             return map
           },
-          {}
+          {} as any
         )
         return Object
           .keys(symbolFrequencyMap)
@@ -81,22 +93,28 @@ export class Machine extends React.Component {
     }
   ]
 
-  noRewardMessage = `You've won nothing`
+  private noRewardMessage = `You've won nothing`
 
-  autoStartTimeout = 5000
+  private autoStartTimeout = 5000
 
-  autoStopTimeout = 10000
+  private autoStopTimeout = 10000
 
-  wheelsCount = 3
+  private wheelsCount = 3
 
-  wheelSymbolCount = 4
+  private wheelSymbolCount = 4
 
-  wheelRotationDuration = 50
+  private wheelRotationDuration = 50
 
-  wheelStoppingDelay = 500
+  private wheelStoppingDelay = 500
 
-  componentWillMount() {
-    const wheels = []
+  private autoStartTask: ScheduledTask
+
+  private stoppingTask: any
+
+  private autoStopTask: ScheduledTask
+
+  public componentWillMount() {
+    const wheels: Wheel[] = []
 
     for (let i = 0; i < this.wheelsCount; i++) {
       wheels.push({
@@ -109,13 +127,16 @@ export class Machine extends React.Component {
     this.setState({
       wheels
     })
+
     this.autoStartTask = new ScheduledTask(() => this.startSpinning(), this.autoStartTimeout)
     this.stoppingTask = new ScheduledTask(() => {}, 0)
-    this.spinningTask = new RepeatingTask(() => this.spinWheels(), this.wheelRotationDuration)
-    this.spinningTask.run()
+
+    const spinningTask = new RepeatingTask(() => this.spinWheels(), this.wheelRotationDuration)
+
+    spinningTask.run()
   }
 
-  startSpinning() {
+  private startSpinning() {
     this.autoStartTask.cancel()
     this.stoppingTask.cancel()
     this.autoStopTask = new ScheduledTask(
@@ -132,7 +153,7 @@ export class Machine extends React.Component {
     })
   }
 
-  stopSpinning() {
+  private stopSpinning() {
     this.autoStopTask.cancel()
     this.stoppingTask = new CompositeTask(
       this.state.wheels.map((wheel, index) => {
@@ -149,7 +170,7 @@ export class Machine extends React.Component {
     })
   }
 
-  stopWheel(id) {
+  private stopWheel(id: number) {
     this.setState({
       wheels: this.state.wheels.map(wheel => {
         if (wheel.id == id) {
@@ -164,7 +185,7 @@ export class Machine extends React.Component {
     })
   }
 
-  spinWheels() {
+  private spinWheels() {
     this.setState({
       wheels: this.state.wheels.map(wheel => {
         if (wheel.isSpinning) {
@@ -182,7 +203,7 @@ export class Machine extends React.Component {
     })
   }
 
-  getResults(wheels) {
+  private getResults(wheels: Wheel[]) {
     const applicableRule = this.rewardRules.find(rule => rule.applies(wheels))
     if (applicableRule != null) {
       return {
@@ -197,7 +218,7 @@ export class Machine extends React.Component {
     }
   }
 
-  render() {
+  public render() {
     return (
       <MachineView
         wheels={this.state.wheels}

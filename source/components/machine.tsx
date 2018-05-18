@@ -1,8 +1,18 @@
 import * as React from "react";
 import * as ReactDOM from "react-dom";
-import { Wheel } from "./wheel"
+import { Wheel } from "../containers/machine";
+import { Wheel as WheelView } from "./wheel"
 
-export class MachineView extends React.Component {
+export interface Props {
+  wheels: Wheel[]
+  isSpinning: boolean
+  onStartClick: () => void
+  onStopClick: () => void
+  reward: number
+  resultMessage: string
+}
+
+export class MachineView extends React.Component<Props, undefined> {
   wheelSymbolImages = [
     './media/slot-images/strawberry.png',
     './media/slot-images/banana.png',
@@ -16,7 +26,7 @@ export class MachineView extends React.Component {
         <div className="wheels">
           {
             this.props.wheels.map(wheel => (
-              <Wheel
+              <WheelView
                 key={wheel.id}
                 currentSymbol={wheel.currentSymbol}
                 symbolImages={this.wheelSymbolImages}
