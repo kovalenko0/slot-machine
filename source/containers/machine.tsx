@@ -1,6 +1,6 @@
 import * as React from "react";
 import * as ReactDOM from "react-dom";
-import { ScheduledTask, CompositeTask } from '../scheduled-task'
+import { ScheduledTask, CompositeTask, Task } from '../scheduled-task'
 import { RepeatingTask } from "../repeating-task";
 import { MachineView } from '../components/machine'
 import { randomIntInRange } from "../random-int-in-range";
@@ -107,11 +107,13 @@ export class Machine extends React.Component<undefined, State> {
 
   private wheelStoppingDelay = 500
 
-  private autoStartTask: ScheduledTask
+  private autoStartTask: Task
 
-  private stoppingTask: any
+  private stoppingTask: Task
 
-  private autoStopTask: ScheduledTask
+  private autoStopTask: Task
+
+  private spinningTask: RepeatingTask
 
   public componentWillMount() {
     const wheels: Wheel[] = []
@@ -130,10 +132,8 @@ export class Machine extends React.Component<undefined, State> {
 
     this.autoStartTask = new ScheduledTask(() => this.startSpinning(), this.autoStartTimeout)
     this.stoppingTask = new ScheduledTask(() => {}, 0)
-
-    const spinningTask = new RepeatingTask(() => this.spinWheels(), this.wheelRotationDuration)
-
-    spinningTask.run()
+    this.spinningTask = new RepeatingTask(() => this.spinWheels(), this.wheelRotationDuration)
+    this.spinningTask.run()
   }
 
   private startSpinning() {
@@ -216,6 +216,13 @@ export class Machine extends React.Component<undefined, State> {
         reward: 0
       }
     }
+  }
+
+  public componentWillUnmount() {
+    this.spinningTask.stop()
+    this.autoStartTask.cancel()
+    this.stoppingTask.cancel()  
+    this.autoStopTask.cancel()
   }
 
   public render() {

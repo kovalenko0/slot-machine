@@ -1,4 +1,4 @@
-export function randomIntInRange(from, to) {
+export function randomIntInRange(from: number, to: number) {
   const [min, max] = [from, to].sort()
   const range = max - min;
 

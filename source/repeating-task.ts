@@ -1,14 +1,19 @@
 export class RepeatingTask {
-  constructor(action, interval) {
-    this.action = action
-    this.interval = interval
+  constructor(
+    private action: () => void,
+    private interval: number
+  ) {
     this.isRunning = false
   }
 
+  public isRunning: boolean
+
   run() {
     this.isRunning = true
-    this.intervalId = setInterval(this.action, this.interval)
+    this.intervalId = window.setInterval(this.action, this.interval)
   }
+
+  private intervalId: number
 
   stop() {
     clearInterval(this.intervalId)
