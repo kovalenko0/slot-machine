@@ -5,17 +5,22 @@ module.exports = {
   entry: [
     './source/entry.jsx'
   ],
+  devtool: 'source-map',
   module: {
     rules: [
       {
-        test: /\.(js|jsx)$/,
-        exclude: /node_modules/,
-        use: ['babel-loader']
+        test: /\.(tsx?|jsx?)$/,
+        use: ['awesome-typescript-loader'],
+      },
+      {
+        enforce: 'pre',
+        test: /\.js$/,
+        loader: 'source-map-loader'
       }
     ]
   },
   resolve: {
-    extensions: ['*', '.js', '.jsx']
+    extensions: ['.js', '.jsx', '.ts', '.tsx']
   },
   output: {
     path: __dirname + '/dist',

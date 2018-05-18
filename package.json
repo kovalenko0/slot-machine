@@ -20,6 +20,7 @@
   },
   "homepage": "https://github.com/kovalenko0/slot-machine#readme",
   "devDependencies": {
+    "awesome-typescript-loader": "^5.0.0",
     "babel-core": "^6.26.3",
     "babel-jest": "^22.4.3",
     "babel-loader": "^7.1.4",
@@ -31,12 +32,16 @@
     "html-webpack-plugin": "^3.2.0",
     "jest": "^22.4.3",
     "react-test-renderer": "^16.3.2",
+    "source-map-loader": "^0.2.3",
     "start-server-webpack-plugin": "^2.2.5",
+    "typescript": "^2.8.3",
     "webpack": "^4.8.3",
     "webpack-cli": "^2.1.3",
     "webpack-dev-server": "^3.1.4"
   },
   "dependencies": {
+    "@types/react": "^16.3.14",
+    "@types/react-dom": "^16.0.5",
     "react": "^16.3.2",
     "react-dom": "^16.3.2"
   }
