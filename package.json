@@ -9,6 +9,13 @@
     "start": "webpack-dev-server --mode development",
     "build": "webpack"
   },
+  "jest": {
+    "moduleFileExtensions": ["ts", "tsx", "js"],
+    "transform": {
+      "^.+\\.(ts|tsx)$": "<rootDir>/tests-compiler.js"
+    },
+    "testMatch": ["**/*.test.+(ts|tsx|js)"]
+  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/kovalenko0/slot-machine.git"
@@ -20,6 +27,7 @@
   },
   "homepage": "https://github.com/kovalenko0/slot-machine#readme",
   "devDependencies": {
+    "@types/jest": "^22.2.3",
     "awesome-typescript-loader": "^5.0.0",
     "babel-core": "^6.26.3",
     "babel-jest": "^22.4.3",
@@ -42,6 +50,7 @@
   "dependencies": {
     "@types/react": "^16.3.14",
     "@types/react-dom": "^16.0.5",
+    "@types/react-test-renderer": "^16.0.1",
     "react": "^16.3.2",
     "react-dom": "^16.3.2"
   }

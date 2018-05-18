@@ -2,10 +2,10 @@ import * as React from "react";
 import * as ReactDOM from "react-dom";
 import { ScheduledTask, CompositeTask, Task } from '../scheduled-task'
 import { RepeatingTask } from "../repeating-task";
-import { MachineView } from '../components/machine'
+import { MachineView, Props as MachineViewProps } from '../components/machine'
 import { randomIntInRange } from "../random-int-in-range";
 
-interface State {
+export interface State {
   wheels: Wheel[],
   resultMessage: string,
   reward: number
@@ -17,7 +17,11 @@ export interface Wheel {
   currentSymbol: number
 }
 
-export class Machine extends React.Component<undefined, State> {
+export interface Props {
+  render: (props: MachineViewProps) => JSX.Element
+}
+
+export class Machine extends React.Component<Props, State> {
   public state: State = {
     wheels: [],
     resultMessage: null,
@@ -203,7 +207,7 @@ export class Machine extends React.Component<undefined, State> {
     })
   }
 
-  private getResults(wheels: Wheel[]) {
+  public getResults(wheels: Wheel[]) {
     const applicableRule = this.rewardRules.find(rule => rule.applies(wheels))
     if (applicableRule != null) {
       return {
@@ -226,15 +230,13 @@ export class Machine extends React.Component<undefined, State> {
   }
 
   public render() {
-    return (
-      <MachineView
-        wheels={this.state.wheels}
-        isSpinning={this.state.wheels.some(wheel => wheel.isSpinning)}
-        resultMessage={this.state.resultMessage}
-        reward={this.state.reward}
-        onStartClick={() => this.startSpinning()}
-        onStopClick={() => this.stopSpinning()}
-      />
-    )
+    return this.props.render({
+      wheels: this.state.wheels,
+      isSpinning: this.state.wheels.some(wheel => wheel.isSpinning),
+      resultMessage: this.state.resultMessage,
+      reward: this.state.reward,
+      onStartClick: () => this.startSpinning(),
+      onStopClick: () => this.stopSpinning(),
+    })
   }
 }
